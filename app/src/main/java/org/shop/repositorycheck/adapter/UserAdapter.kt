@@ -8,11 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import org.shop.repositorycheck.databinding.ItemUserBinding
 import org.shop.repositorycheck.model.User
 
-class UserAdapter : ListAdapter<User, UserAdapter.UserViewHolder>(diffUtil) {
+class UserAdapter(val onClick: (User) -> Unit) :
+    ListAdapter<User, UserAdapter.UserViewHolder>(diffUtil) {
     inner class UserViewHolder(private val viewBinding: ItemUserBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: User) {
             viewBinding.usernameTextView.text = item.username
+            viewBinding.root.setOnClickListener {
+                onClick(item)
+            }
         }
     }
 
