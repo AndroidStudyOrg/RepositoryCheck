@@ -3,6 +3,8 @@ package org.shop.repositorycheck
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.shop.repositorycheck.adapter.UserAdapter
 import org.shop.repositorycheck.databinding.ActivityMainBinding
 import org.shop.repositorycheck.model.Repo
 import org.shop.repositorycheck.model.UserDto
@@ -15,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var userAdapter: UserAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).also {
@@ -41,11 +44,18 @@ class MainActivity : AppCompatActivity() {
         githubService.searchUsers("squar").enqueue(object : Callback<UserDto> {
             override fun onResponse(call: Call<UserDto>, response: Response<UserDto>) {
                 Log.e("MainActivity", "Search User: ${response.body().toString()}")
+                userAdapter.submitList(response.body()?.items)
             }
 
             override fun onFailure(call: Call<UserDto>, t: Throwable) {
 
             }
         })
+
+        userAdapter = UserAdapter()
+        binding.userRecyclerView.apply {
+            layoutManager=LinearLayoutManager(context)
+            adapter = userAdapter
+        }
     }
 }
