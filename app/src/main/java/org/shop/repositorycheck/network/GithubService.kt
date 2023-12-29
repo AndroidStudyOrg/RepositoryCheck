@@ -12,7 +12,8 @@ interface GithubService {
     @GET("/users/{username}/repos")
     fun listRepos(
         @Header("Authorization") token: String,
-        @Path("username") username: String
+        @Path("username") username: String,
+        @Query("page") page: Int
     ): Call<List<Repo>>
 
     @GET("/search/users")
